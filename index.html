@@ -8,9 +8,17 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
     <style>
-        :root { --primary-color: #007BFF; --secondary-color: #6c757d; --background-color: #f4f7f6; --card-bg-color: #ffffff; --text-color: #333; --shadow: 0 4px 8px rgba(0,0,0,0.1); --danger-color: #dc3545; --success-color: #28a745; --border-color: #e0e0e0; }
-        body.dark-mode { --background-color: #121212; --card-bg-color: #1E1E1E; --text-color: #E0E0E0; --secondary-color: #9E9E9E; --shadow: 0 4px 8px rgba(0,0,0,0.3); --border-color: #2c2c2c; }
+        :root {
+            --primary-color: #007BFF; --secondary-color: #6c757d; --background-color: #f4f7f6;
+            --card-bg-color: #ffffff; --text-color: #333; --shadow: 0 4px 8px rgba(0,0,0,0.1);
+            --danger-color: #dc3545; --success-color: #28a745; --border-color: #e0e0e0;
+        }
+        body.dark-mode {
+            --background-color: #121212; --card-bg-color: #1E1E1E; --text-color: #E0E0E0;
+            --secondary-color: #9E9E9E; --shadow: 0 4px 8px rgba(0,0,0,0.3); --border-color: #2c2c2c;
+        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--text-color); display: flex; flex-direction: column; height: 100vh; transition: background-color 0.3s, color 0.3s; }
         .header { background: var(--primary-color); color: white; padding: 18px 20px; text-align: center; font-size: 1.2rem; font-weight: 600; }
