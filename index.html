@@ -4,19 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>পাসওয়ার্ড ম্যানেজার</title>
-
-    <!-- PWA Manifest and Theme -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#007BFF"/>
-    <link rel="apple-touch-icon" href="icon.png">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
-        /* The entire CSS code from the previous final version goes here. It is unchanged. */
         :root {
             --primary-color: #007BFF; --secondary-color: #6c757d; --background-color: #f4f7f6;
             --card-bg-color: #ffffff; --text-color: #333; --shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -154,6 +147,7 @@
                 <button class="save-btn" onclick="backupData()" style="margin-top:10px;"><i class="fas fa-download"></i> সব তথ্য ব্যাকআপ নিন</button>
                 <label for="restoreFile" class="restore-label" style="margin-top: 15px;"><i class="fas fa-upload"></i> ফাইল থেকে রিস্টোর করুন</label>
                 <input type="file" id="restoreFile" accept=".json" onchange="restoreData(event)">
+                <button class="save-btn" onclick="clearAllData()" style="margin-top: 15px; background-color: var(--danger-color);"><i class="fas fa-trash-alt"></i> সব ডেটা মুছে ফেলুন</button>
             </div>
         </div>
     </div>
@@ -222,16 +216,15 @@
             });
         });
 
-        // This function ensures that data from any previous version is moved to the final storage key.
         function migrateOldData() {
             const finalData = localStorage.getItem(STORAGE_KEY);
-            if (finalData) return; // If final data exists, no need to migrate.
+            if (finalData) return;
             const oldKeys = ['passwords_v18', 'passwords_v17', 'passwords_v16', 'passwords_v15', 'passwords_v14', 'passwords_v13', 'passwords_v12', 'passwords_v11', 'passwords_v10', 'passwords_v9', 'passwords_v8', 'passwords_v2', 'passwords'];
             for (const key of oldKeys) {
                 const oldData = localStorage.getItem(key);
                 if (oldData) {
                     localStorage.setItem(STORAGE_KEY, oldData);
-                    localStorage.removeItem(key); // Clean up the old key
+                    localStorage.removeItem(key);
                     return;
                 }
             }
@@ -394,11 +387,27 @@
                         buttons: [ { text: 'না', class: 'btn-secondary', action: 'reject' }, { text: 'হ্যাঁ', class: 'btn-primary', action: 'resolve' } ]
                     });
                     const currentData = getPasswords();
-                    for (const category in importedData) { if (!currentData[category]) currentData[category] = []; currentData[category].push(...importedData[category]); }
+                    let newEntriesCount = 0;
+                    for (const category in importedData) {
+                        if (!currentData[category]) currentData[category] = [];
+                        importedData[category].forEach(newPass => {
+                            const isDuplicate = currentData[category].some(existingPass => 
+                                existingPass.website === newPass.website && existingPass.username === newPass.username
+                            );
+                            if (!isDuplicate) {
+                                currentData[category].push(newPass);
+                                newEntriesCount++;
+                            }
+                        });
+                    }
                     savePasswords(currentData);
                     refreshUI();
                     closeModal('settingsModal');
-                    showToast("ডেটা সফলভাবে রিস্টোর করা হয়েছে!");
+                    if (newEntriesCount > 0) {
+                        showToast(`${newEntriesCount} টি নতুন পাসওয়ার্ড যোগ করা হয়েছে!`);
+                    } else {
+                        showToast("কোনো নতুন পাসওয়ার্ড পাওয়া যায়নি।");
+                    }
                 } catch (err) { if (err) { showToast("ভুল ফাইল ফরম্যাট।", true); } }
                 finally { event.target.value = ''; }
             };
@@ -477,6 +486,19 @@
                 showToast('ক্যাটাগরি মুছে ফেলা হয়েছে!');
             } catch {}
         }
+        async function clearAllData() {
+             try {
+                await showNotification({
+                    title: 'আপনি কি নিশ্চিত?', message: 'আপনি কি সব ক্যাটাগরি এবং পাসওয়ার্ড স্থায়ীভাবে মুছে ফেলতে চান? এই কাজটি ফেরানো যাবে না।',
+                    icon: `<i class="fas fa-exclamation-triangle" style="color:var(--danger-color)"></i>`,
+                    buttons: [{ text: 'না, বাতিল করুন', class: 'btn-secondary', action: 'reject' }, { text: 'হ্যাঁ, সবকিছু মুছুন', class: 'btn-danger', action: 'resolve' }]
+                });
+                savePasswords({}); // Save an empty object
+                refreshUI();
+                closeModal('settingsModal');
+                showToast('সব ডেটা সফলভাবে মুছে ফেলা হয়েছে!');
+            } catch { /* User cancelled */ }
+        }
         function showPrompt(config) {
             return new Promise((resolve, reject) => {
                 showNotification({
@@ -490,4 +512,4 @@
         window.onclick = (event) => { if (event.target.classList.contains('modal')) event.target.style.display = "none"; }
     </script>
 </body>
-              </html>
+</html>
