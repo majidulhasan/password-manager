@@ -8,17 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <style>
-        :root {
-            --primary-color: #007BFF; --secondary-color: #6c757d; --background-color: #f4f7f6;
-            --card-bg-color: #ffffff; --text-color: #333; --shadow: 0 4px 8px rgba(0,0,0,0.1);
-            --danger-color: #dc3545; --success-color: #28a745; --border-color: #e0e0e0;
-        }
-        body.dark-mode {
-            --background-color: #121212; --card-bg-color: #1E1E1E; --text-color: #E0E0E0;
-            --secondary-color: #9E9E9E; --shadow: 0 4px 8px rgba(0,0,0,0.3); --border-color: #2c2c2c;
-        }
+        :root { --primary-color: #007BFF; --secondary-color: #6c757d; --background-color: #f4f7f6; --card-bg-color: #ffffff; --text-color: #333; --shadow: 0 4px 8px rgba(0,0,0,0.1); --danger-color: #dc3545; --success-color: #28a745; --border-color: #e0e0e0; }
+        body.dark-mode { --background-color: #121212; --card-bg-color: #1E1E1E; --text-color: #E0E0E0; --secondary-color: #9E9E9E; --shadow: 0 4px 8px rgba(0,0,0,0.3); --border-color: #2c2c2c; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--text-color); display: flex; flex-direction: column; height: 100vh; transition: background-color 0.3s, color 0.3s; }
         .header { background: var(--primary-color); color: white; padding: 18px 20px; text-align: center; font-size: 1.2rem; font-weight: 600; }
@@ -98,105 +90,41 @@
     </style>
 </head>
 <body>
+    <!-- The entire HTML structure is here... -->
     <div class="header">পাসওয়ার্ড ম্যানেজার</div>
-    <div class="top-section">
-        <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="অ্যাপ বা ওয়েবসাইট খুঁজুন..."></div>
-        <div class="category-tabs" id="categoryTabs"></div>
-    </div>
-    <div class="main-content">
-        <div id="passwordList"></div>
-        <div id="noResultsState" style="display: none;"><i class="fas fa-search-minus"></i><p>কোনো ফলাফল পাওয়া যায়নি।</p></div>
-    </div>
+    <div class="top-section"><div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="অ্যাপ বা ওয়েবসাইট খুঁজুন..."></div><div class="category-tabs" id="categoryTabs"></div></div>
+    <div class="main-content"><div id="passwordList"></div><div id="noResultsState" style="display: none;"><i class="fas fa-search-minus"></i><p>কোনো ফলাফল পাওয়া যায়নি।</p></div></div>
     <button class="add-btn" onclick="openAddModal()"><i class="fas fa-plus"></i></button>
-    <div class="footer">
-        <div class="footer-item active"><i class="fas fa-home"></i><div>Home</div></div>
-        <div class="footer-item" onclick="openSettingsModal()"><i class="fas fa-cog"></i><div>Settings</div></div>
-    </div>
-
-    <!-- Modals -->
-    <div id="passwordModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2 class="modal-title" id="modalTitle"></h2><span class="close" onclick="closeModal('passwordModal')">&times;</span></div>
-            <input type="hidden" id="editCategoryStore"><input type="hidden" id="editIndexStore">
-            <div class="form-group" id="categoryInputContainer"></div>
-            <div class="form-group"><label>ওয়েবসাইট/অ্যাপের নাম</label><input type="text" id="website" required></div>
-            <div class="form-group"><label>ইউজারনেম/ইমেইল</label><input type="text" id="username" required></div>
-            <div class="form-group">
-                <label>পাসওয়ার্ড</label>
-                <input type="password" id="password" required style="padding-right: 45px;">
-                <i id="toggleAddPasswordVisibility" class="fas fa-eye visibility-toggle"></i>
-            </div>
-            <button class="save-btn" onclick="savePassword()">সংরক্ষণ করুন</button>
-        </div>
-    </div>
-    <div id="settingsModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2 class="modal-title" id="settingsModalTitle">সেটিংস</h2><span class="close" onclick="closeModal('settingsModal')">&times;</span></div>
-            <div class="settings-section">
-                <h3>সাধারণ</h3>
-                <div class="settings-item"><span>ডার্ক মোড</span><label class="switch"><input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()"><span class="slider"></span></label></div>
-                 <div class="settings-item developer-info" onclick="showDeveloperInfo()"><span>ডেভেলপার পরিচিতি</span><i class="fas fa-chevron-right"></i></div>
-            </div>
-            <div class="settings-section" id="categoryManagementSection">
-                <h3>ক্যাটাগরি ম্যানেজমেন্ট</h3>
-                <div id="categoryManagementList"></div>
-                <button class="save-btn" onclick="addCategory()" style="margin-top:15px; background-color: var(--secondary-color);"><i class="fas fa-plus"></i> নতুন ক্যাটাগরি যোগ করুন</button>
-            </div>
-            <div class="settings-section">
-                <h3>ডেটা ম্যানেজমেন্ট</h3>
-                <button class="save-btn" onclick="backupData()" style="margin-top:10px;"><i class="fas fa-download"></i> সব তথ্য ব্যাকআপ নিন</button>
-                <label for="restoreFile" class="restore-label" style="margin-top: 15px;"><i class="fas fa-upload"></i> ফাইল থেকে রিস্টোর করুন</label>
-                <input type="file" id="restoreFile" accept=".json" onchange="restoreData(event)">
-                <button class="save-btn" onclick="clearAllData()" style="margin-top: 15px; background-color: var(--danger-color);"><i class="fas fa-trash-alt"></i> সব ডেটা মুছে ফেলুন</button>
-            </div>
-        </div>
-    </div>
-    <div id="categoryModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2 class="modal-title" id="categoryModalTitle">ক্যাটাগরি বাছাই করুন</h2><span class="close" onclick="closeModal('categoryModal')">&times;</span></div>
-            <div id="categoryList"></div>
-        </div>
-    </div>
-     <div id="viewPasswordModal" class="modal">
-        <div class="modal-content">
-            <div id="viewPasswordIcon"><i class="fas fa-key"></i></div>
-            <h3 class="modal-title" id="viewPasswordTitle"></h3>
-            <div class="view-info-group">
-                <label>ইউজারনেম / ইমেইল</label>
-                <div class="info-field"><p id="viewUsername"></p><i class="far fa-copy copy-icon" id="copyUsername"></i></div>
-            </div>
-            <div class="view-info-group">
-                <label>পাসওয়ার্ড</label>
-                <div class="info-field"><input type="password" id="viewPasswordInput" readonly><i id="togglePasswordVisibility" class="fas fa-eye"></i><i class="far fa-copy copy-icon" id="copyPassword"></i></div>
-            </div>
-            <button class="save-btn" onclick="closeModal('viewPasswordModal')">ঠিক আছে</button>
-        </div>
-    </div>
-    <div id="developerModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header"><h2 class="modal-title">ডেভেলপার পরিচিতি</h2><span class="close" onclick="closeModal('developerModal')">&times;</span></div>
-            <img id="developer-pic" src="https://i.ibb.co/C0TPc5j/Pics-Art-08-23-09-24-33.png" alt="Developer Pic">
-            <h3 id="developer-name">মোঃ মাজিদুল হাসান {শাহীন}</h3>
-            <p id="developer-bio">একজন ওয়েব ও অ্যাপ ডেভেলপার হিসেবে আমি সবসময় চেষ্টা করি প্রযুক্তিকে মানুষের জন্য আরও সহজ, কার্যকর এবং উপভোগ্য করে তুলতে।</p>
-            <div id="developer-socials">
-                <a href="mailto:your.email@example.com" target="_blank"><i class="fas fa-envelope"></i></a>
-                <a href="https://facebook.com/yourprofile" target="_blank"><i class="fab fa-facebook"></i></a>
-                <a href="https://t.me/yourprofile" target="_blank"><i class="fab fa-telegram"></i></a>
-            </div>
-            <button class="save-btn" onclick="closeModal('developerModal')">বন্ধ করুন</button>
-        </div>
-    </div>
-    <div id="notificationModal" class="modal">
-        <div class="modal-content">
-            <div id="notificationIcon"></div><h3 id="notificationTitle" class="modal-title"></h3><p id="notificationMessage"></p><div id="notificationActions"></div>
-        </div>
-    </div>
+    <div class="footer"><div class="footer-item active"><i class="fas fa-home"></i><div>Home</div></div><div class="footer-item" onclick="openSettingsModal()"><i class="fas fa-cog"></i><div>Settings</div></div></div>
+    <div id="passwordModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="modalTitle"></h2><span class="close" onclick="closeModal('passwordModal')">&times;</span></div><input type="hidden" id="editCategoryStore"><input type="hidden" id="editIndexStore"><div class="form-group" id="categoryInputContainer"></div><div class="form-group"><label>ওয়েবসাইট/অ্যাপের নাম</label><input type="text" id="website" required></div><div class="form-group"><label>ইউজারনেম/ইমেইল</label><input type="text" id="username" required></div><div class="form-group"><label>পাসওয়ার্ড</label><input type="password" id="password" required style="padding-right: 45px;"><i id="toggleAddPasswordVisibility" class="fas fa-eye visibility-toggle"></i></div><button class="save-btn" onclick="savePassword()">সংরক্ষণ করুন</button></div></div>
+    <div id="settingsModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="settingsModalTitle">সেটিংস</h2><span class="close" onclick="closeModal('settingsModal')">&times;</span></div><div class="settings-section"><h3>সাধারণ</h3><div class="settings-item"><span>ডার্ক মোড</span><label class="switch"><input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()"><span class="slider"></span></label></div><div class="settings-item developer-info" onclick="showDeveloperInfo()"><span>ডেভেলপার পরিচিতি</span><i class="fas fa-chevron-right"></i></div></div><div class="settings-section" id="categoryManagementSection"><h3>ক্যাটাগরি ম্যানেজমেন্ট</h3><div id="categoryManagementList"></div><button class="save-btn" onclick="addCategory()" style="margin-top:15px; background-color: var(--secondary-color);"><i class="fas fa-plus"></i> নতুন ক্যাটাগরি যোগ করুন</button></div><div class="settings-section"><h3>ডেটা ম্যানেজমেন্ট</h3><button class="save-btn" onclick="backupData()" style="margin-top:10px;"><i class="fas fa-download"></i> সব তথ্য ব্যাকআপ নিন</button><label for="restoreFile" class="restore-label" style="margin-top: 15px;"><i class="fas fa-upload"></i> ফাইল থেকে রিস্টোর করুন</label><input type="file" id="restoreFile" accept=".json" onchange="restoreData(event)"><button class="save-btn" onclick="clearAllData()" style="margin-top: 15px; background-color: var(--danger-color);"><i class="fas fa-trash-alt"></i> সব ডেটা মুছে ফেলুন</button></div></div></div>
+    <div id="categoryModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="modal-title" id="categoryModalTitle">ক্যাটাগরি বাছাই করুন</h2><span class="close" onclick="closeModal('categoryModal')">&times;</span></div><div id="categoryList"></div></div></div>
+    <div id="viewPasswordModal" class="modal"><div class="modal-content"><div id="viewPasswordIcon"><i class="fas fa-key"></i></div><h3 class="modal-title" id="viewPasswordTitle"></h3><div class="view-info-group"><label>ইউজারনেম / ইমেইল</label><div class="info-field"><p id="viewUsername"></p><i class="far fa-copy copy-icon" id="copyUsername"></i></div></div><div class="view-info-group"><label>পাসওয়ার্ড</label><div class="info-field"><input type="password" id="viewPasswordInput" readonly><i id="togglePasswordVisibility" class="fas fa-eye"></i><i class="far fa-copy copy-icon" id="copyPassword"></i></div></div><button class="save-btn" onclick="closeModal('viewPasswordModal')">ঠিক আছে</button></div></div>
+    <div id="developerModal" class="modal"><div class="modal-content"><div class="modal-header"><h2 class="modal-title">ডেভেলপার পরিচিতি</h2><span class="close" onclick="closeModal('developerModal')">&times;</span></div><img id="developer-pic" src="https://i.ibb.co/C0TPc5j/Pics-Art-08-23-09-24-33.png" alt="Developer Pic"><h3 id="developer-name">মোঃ মাজিদুল হাসান {শাহীন}</h3><p id="developer-bio">একজন ওয়েব ও অ্যাপ ডেভেলপার হিসেবে আমি সবসময় চেষ্টা করি প্রযুক্তিকে মানুষের জন্য আরও সহজ, কার্যকর এবং উপভোগ্য করে তুলতে।</p><div id="developer-socials"><a href="mailto:your.email@example.com" target="_blank"><i class="fas fa-envelope"></i></a><a href="https://facebook.com/yourprofile" target="_blank"><i class="fab fa-facebook"></i></a><a href="https://t.me/yourprofile" target="_blank"><i class="fab fa-telegram"></i></a></div><button class="save-btn" onclick="closeModal('developerModal')">বন্ধ করুন</button></div></div>
+    <div id="notificationModal" class="modal"><div class="modal-content"><div id="notificationIcon"></div><h3 id="notificationTitle" class="modal-title"></h3><p id="notificationMessage"></p><div id="notificationActions"></div></div></div>
     <div id="toastNotification"></div>
 
     <script>
         const STORAGE_KEY = 'passwords_final';
 
         document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const dataToSave = urlParams.get('saveData');
+            
+            if (dataToSave) {
+                try {
+                    const receivedData = JSON.parse(decodeURIComponent(dataToSave));
+                    let allPasswords = getPasswords();
+                    const { category, website, username, password } = receivedData;
+                    if (!allPasswords[category]) { allPasswords[category] = []; }
+                    allPasswords[category].push({ website, username, password });
+                    savePasswords(allPasswords);
+                    document.body.innerHTML = `<div style="text-align:center; padding-top: 50px; font-size:1.2rem; color: #333;">তথ্য সফলভাবে সংরক্ষণ করা হয়েছে!<br><br>এই ট্যাবটি এখন বন্ধ হয়ে যাবে...</div>`;
+                    setTimeout(() => { window.close(); }, 2000);
+                } catch (e) { document.body.innerHTML = "ত্রুটি: তথ্য সেভ করা যায়নি।"; }
+                return;
+            }
+
             migrateOldData();
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
@@ -216,300 +144,10 @@
             });
         });
 
-        function migrateOldData() {
-            const finalData = localStorage.getItem(STORAGE_KEY);
-            if (finalData) return;
-            const oldKeys = ['passwords_v18', 'passwords_v17', 'passwords_v16', 'passwords_v15', 'passwords_v14', 'passwords_v13', 'passwords_v12', 'passwords_v11', 'passwords_v10', 'passwords_v9', 'passwords_v8', 'passwords_v2', 'passwords'];
-            for (const key of oldKeys) {
-                const oldData = localStorage.getItem(key);
-                if (oldData) {
-                    localStorage.setItem(STORAGE_KEY, oldData);
-                    localStorage.removeItem(key);
-                    return;
-                }
-            }
-        }
-
-        getPasswords = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-        savePasswords = (p) => localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
-
-        function refreshUI() { renderPasswords(); renderCategoryTabs(); applyFilters(); }
-        function renderPasswords() {
-            const list = document.getElementById('passwordList'); list.innerHTML = '';
-            const data = getPasswords();
-            if (Object.keys(data).length === 0) { list.innerHTML = `<div class="empty-state" id="initialEmptyState"><i class="fas fa-key"></i><p>এখনো কোনো পাসওয়ার্ড সেভ করা হয়নি।</p></div>`; document.getElementById('noResultsState').style.display = 'none'; return; }
-            Object.keys(data).forEach(cat => data[cat].forEach((p, i) => {
-                const item = document.createElement('div');
-                item.className = 'password-item'; item.dataset.category = cat;
-                item.innerHTML = `<div class="icon"><i class="fas fa-shield-alt"></i></div><div class="details"><strong>${p.website}</strong><br><span>${p.username}</span></div><div class="actions"><button onclick="viewPassword('${cat}', ${i})"><i class="fas fa-eye"></i></button><button onclick="openEditModal('${cat}', ${i})"><i class="fas fa-pen"></i></button><button onclick="deletePassword('${cat}', ${i})"><i class="fas fa-trash"></i></button></div>`;
-                list.appendChild(item);
-            }));
-        }
-        function renderCategoryTabs() { const c=document.getElementById("categoryTabs"),e=document.querySelector(".tab-item.active")?.dataset.category||"All";c.innerHTML="";const t=Object.keys(getPasswords());["All",...t].forEach(t=>{const a=document.createElement("div");a.className="tab-item",t===e&&a.classList.add("active"),a.innerText=t,a.dataset.category=t,a.onclick=()=>filterByCategory(t),c.appendChild(a)}) }
-        function filterByCategory(category) { document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active')); document.querySelector(`.tab-item[data-category="${category}"]`).classList.add('active'); applyFilters(); }
-        function applyFilters() {
-            const noResultsState = document.getElementById('noResultsState');
-            noResultsState.style.display = 'none';
-            const initialEmptyState = document.getElementById('initialEmptyState');
-            if (initialEmptyState) initialEmptyState.style.display = 'none';
-            const activeCat = document.querySelector('.tab-item.active')?.dataset.category || 'All';
-            const searchTerm = document.getElementById('searchInput').value.toUpperCase();
-            let visibleCount = 0;
-            const items = document.querySelectorAll('.password-item');
-            items.forEach(item => {
-                const catMatch = (activeCat === 'All' || item.dataset.category === activeCat);
-                const searchMatch = item.querySelector("strong").innerText.toUpperCase().includes(searchTerm);
-                if (catMatch && searchMatch) {
-                    item.classList.remove('hidden');
-                    visibleCount++;
-                } else {
-                    item.classList.add('hidden');
-                }
-            });
-            if (visibleCount === 0 && Object.keys(getPasswords()).length > 0) {
-                noResultsState.style.display = 'block';
-            }
-        }
-        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
-        function openAddModal() {
-            const modal = document.getElementById('passwordModal');
-            ['editCategoryStore', 'editIndexStore', 'website', 'username', 'password'].forEach(id => document.getElementById(id).value = '');
-            document.getElementById('modalTitle').innerText = 'নতুন পাসওয়ার্ড যোগ করুন';
-            const activeCategory = document.querySelector('.tab-item.active').dataset.category;
-            const catContainer = document.getElementById('categoryInputContainer');
-            if (activeCategory === 'All') {
-                catContainer.innerHTML = `<label>ক্যাটাগরি</label><div class="custom-select" onclick="openCategorySelector()"><span id="categoryDisplayText">-- ক্যাটাগরি সিলেক্ট করুন --</span></div><input type="hidden" id="categoryValue"><input type="text" id="newCategoryInput" placeholder="নতুন ক্যাটাগরির নাম দিন" style="margin-top: 10px;">`;
-            } else {
-                catContainer.innerHTML = `<label>ক্যাটাগরি</label><input type="text" id="newCategoryInput" value="${activeCategory}">`;
-            }
-            modal.style.display = 'block';
-        }
-        function openCategorySelector() {
-            const list = document.getElementById('categoryList'); list.innerHTML = '';
-            const categories = Object.keys(getPasswords());
-            const currentVal = document.getElementById('categoryValue').value;
-            categories.forEach(cat => {
-                const option = document.createElement('div');
-                option.className = 'category-option' + (currentVal === cat ? ' selected' : '');
-                option.innerHTML = `<span>${cat}</span><div class="radio"></div>`;
-                option.onclick = () => selectCategory(cat);
-                list.appendChild(option);
-            });
-            const addNew = document.createElement('div');
-            addNew.className = 'category-option' + (currentVal === '__addNew__' ? ' selected' : '');
-            addNew.innerHTML = `<span>-- নতুন ক্যাটাগরি যোগ করুন --</span><div class="radio"></div>`;
-            addNew.onclick = () => selectCategory('__addNew__');
-            list.appendChild(addNew);
-            document.getElementById('categoryModal').style.display = 'block';
-        }
-        function selectCategory(categoryName) {
-            document.getElementById('categoryValue').value = categoryName;
-            const textDisplay = document.getElementById('categoryDisplayText');
-            const newCatInput = document.getElementById('newCategoryInput');
-            if (categoryName === '__addNew__') { textDisplay.innerText = 'নতুন ক্যাটাগরি যোগ করা হচ্ছে...'; newCatInput.style.display = 'block'; newCatInput.focus(); }
-            else { textDisplay.innerText = categoryName; newCatInput.style.display = 'none'; }
-            closeModal('categoryModal');
-        }
-        function openEditModal(category, index) { const t=document.getElementById("passwordModal"),a=getPasswords()[category][index];document.getElementById("modalTitle").innerText="পাসওয়ার্ড এডিট করুন",document.getElementById("editCategoryStore").value=category,document.getElementById("editIndexStore").value=index,document.getElementById("categoryInputContainer").innerHTML=`<label>ক্যাটাগরি</label><input type="text" id="newCategoryInput" value="${category}">`,document.getElementById("website").value=a.website,document.getElementById("username").value=a.username,document.getElementById("password").value=a.password,t.style.display="block" }
-        function savePassword() {
-            const website = document.getElementById('website').value.trim(), username = document.getElementById('username').value.trim(), password = document.getElementById('password').value.trim(); let category = '';
-            const customSelect = document.querySelector('.custom-select');
-            if (customSelect) { const selectedVal = document.getElementById('categoryValue').value; category = (selectedVal === '__addNew__') ? document.getElementById('newCategoryInput').value.trim() : selectedVal; }
-            else { category = document.getElementById('newCategoryInput').value.trim(); }
-            if (!category || !website || !username || !password) { showToast('অনুগ্রহ করে সব ঘর পূরণ করুন।', true); return; }
-            let allPasswords = getPasswords();
-            const editCategory = document.getElementById('editCategoryStore').value, editIndex = document.getElementById('editIndexStore').value;
-            if (editIndex) { allPasswords[editCategory].splice(editIndex, 1); if (allPasswords[editCategory].length === 0) delete allPasswords[editCategory]; }
-            if (!allPasswords[category]) allPasswords[category] = [];
-            allPasswords[category].push({ website, username, password });
-            savePasswords(allPasswords);
-            closeModal('passwordModal');
-            refreshUI();
-            showToast('সফলভাবে সংরক্ষণ করা হয়েছে!');
-        }
-        async function deletePassword(category, index) {
-            try {
-                await showNotification({
-                    title: 'আপনি কি নিশ্চিত?', message: `আপনি কি "${getPasswords()[category][index].website}" পাসওয়ার্ডটি মুছে ফেলতে চান?`,
-                    icon: `<i class="fas fa-trash-alt" style="color:var(--danger-color)"></i>`,
-                    buttons: [{ text: 'না, বাতিল করুন', class: 'btn-secondary', action: 'reject' }, { text: 'হ্যাঁ, মুছুন', class: 'btn-danger', action: 'resolve' }]
-                });
-                let allPasswords = getPasswords();
-                allPasswords[category].splice(index, 1);
-                if (allPasswords[category].length === 0) delete allPasswords[category];
-                savePasswords(allPasswords);
-                refreshUI();
-                showToast('সফলভাবে মুছে ফেলা হয়েছে!');
-            } catch { /* User cancelled */ }
-        }
-        function viewPassword(category, index) {
-            const p = getPasswords()[category][index];
-            document.getElementById('viewPasswordTitle').innerText = p.website;
-            document.getElementById('viewUsername').innerText = p.username;
-            const passInput = document.getElementById('viewPasswordInput');
-            passInput.value = p.password; passInput.type = 'password';
-            document.getElementById('togglePasswordVisibility').className = 'fas fa-eye';
-            document.getElementById('copyUsername').onclick = () => copyToClipboard(p.username, 'ইউজারনেম');
-            document.getElementById('copyPassword').onclick = () => copyToClipboard(p.password, 'পাসওয়ার্ড');
-            document.getElementById('viewPasswordModal').style.display = 'block';
-        }
-        function copyToClipboard(text, type) {
-            navigator.clipboard.writeText(text).then(() => { showToast(`${type} কপি করা হয়েছে!`); }).catch(() => { showToast('কপি করতে ব্যর্থ হয়েছে', true); });
-        }
-        function showToast(message, isError = false) {
-            const toast = document.getElementById('toastNotification');
-            toast.innerText = message;
-            toast.style.backgroundColor = isError ? 'var(--danger-color)' : '#333';
-            toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 2000);
-        }
-        function openSettingsModal() { document.getElementById('settingsModal').style.display = 'block'; renderCategoryManagement(); }
-        function backupData() {
-            const data = getPasswords();
-            if (Object.keys(data).length === 0) { showToast("ব্যাকআপ করার মতো কোনো ডেটা নেই।", true); return; }
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob); a.download = 'পাসওয়ার্ড ব্যাকআপ.json';
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            URL.revokeObjectURL(a.href);
-            showToast("ব্যাকআপ ফাইল ডাউনলোড শুরু হয়েছে।");
-        }
-        async function restoreData(event) {
-            const file = event.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = async (e) => {
-                try {
-                    const importedData = JSON.parse(e.target.result);
-                    if (typeof importedData !== 'object' || importedData === null) throw new Error("Invalid format");
-                    await showNotification({
-                        title: 'রিস্টোর নিশ্চিত করুন', message: 'আপনি কি এই ফাইল থেকে ডেটা রিস্টোর করতে চান?',
-                        icon: `<i class="fas fa-upload" style="color:var(--primary-color)"></i>`,
-                        buttons: [ { text: 'না', class: 'btn-secondary', action: 'reject' }, { text: 'হ্যাঁ', class: 'btn-primary', action: 'resolve' } ]
-                    });
-                    const currentData = getPasswords();
-                    let newEntriesCount = 0;
-                    for (const category in importedData) {
-                        if (!currentData[category]) currentData[category] = [];
-                        importedData[category].forEach(newPass => {
-                            const isDuplicate = currentData[category].some(existingPass => 
-                                existingPass.website === newPass.website && existingPass.username === newPass.username
-                            );
-                            if (!isDuplicate) {
-                                currentData[category].push(newPass);
-                                newEntriesCount++;
-                            }
-                        });
-                    }
-                    savePasswords(currentData);
-                    refreshUI();
-                    closeModal('settingsModal');
-                    if (newEntriesCount > 0) {
-                        showToast(`${newEntriesCount} টি নতুন পাসওয়ার্ড যোগ করা হয়েছে!`);
-                    } else {
-                        showToast("কোনো নতুন পাসওয়ার্ড পাওয়া যায়নি।");
-                    }
-                } catch (err) { if (err) { showToast("ভুল ফাইল ফরম্যাট।", true); } }
-                finally { event.target.value = ''; }
-            };
-            reader.readAsText(file);
-        }
-        function toggleDarkMode() { document.body.classList.toggle('dark-mode'); localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light'); }
-        function showDeveloperInfo() { closeModal('settingsModal'); document.getElementById('developerModal').style.display = 'block'; }
-        function showNotification(config) {
-            return new Promise((resolve, reject) => {
-                const modal = document.getElementById('notificationModal');
-                document.getElementById('notificationIcon').innerHTML = config.icon || '';
-                document.getElementById('notificationTitle').innerText = config.title;
-                document.getElementById('notificationMessage').innerHTML = config.message;
-                const actions = document.getElementById('notificationActions'); actions.innerHTML = '';
-                (config.buttons || []).forEach(btn => {
-                    const button = document.createElement('button');
-                    button.innerText = btn.text;
-                    button.className = btn.class;
-                    button.onclick = () => { closeModal('notificationModal'); if (btn.action === 'resolve') resolve(); else reject(); };
-                    actions.appendChild(button);
-                });
-                modal.style.display = 'block';
-            });
-        }
-        function renderCategoryManagement() {
-            const listContainer = document.getElementById('categoryManagementList');
-            listContainer.innerHTML = '';
-            const categories = Object.keys(getPasswords());
-            if(categories.length === 0){ listContainer.innerHTML = '<p style="text-align:center; color: var(--secondary-color); padding: 10px 0;">কোনো ক্যাটাগরি নেই।</p>'; return; }
-            categories.forEach(cat => {
-                const item = document.createElement('div');
-                item.className = 'settings-item';
-                item.innerHTML = `<span>${cat}</span><div class="actions"><button onclick="editCategory('${cat}')"><i class="fas fa-pen"></i></button><button onclick="deleteManagedCategory('${cat}')"><i class="fas fa-trash"></i></button></div>`;
-                listContainer.appendChild(item);
-            });
-        }
-        async function addCategory() {
-            try {
-                const newCat = await showPrompt({ title: 'নতুন ক্যাটাগরি', message: 'নতুন ক্যাটাগরির নাম দিন:' });
-                if (!newCat || newCat.trim() === '') return;
-                const data = getPasswords();
-                if(data[newCat]) { showToast('এই ক্যাটাগরি আগে থেকেই আছে।', true); return; }
-                data[newCat] = [];
-                savePasswords(data);
-                renderCategoryManagement(); renderCategoryTabs();
-                showToast('ক্যাটাগরি যোগ করা হয়েছে!');
-            } catch {}
-        }
-        async function editCategory(oldName) {
-            try {
-                const newName = await showPrompt({ title: 'ক্যাটাগরি এডিট করুন', message: `"${oldName}" এর নতুন নাম দিন:`, defaultValue: oldName });
-                if (!newName || newName.trim() === '' || newName === oldName) return;
-                const data = getPasswords();
-                if(data[newName]) { showToast('এই নামের ক্যাটাগরি আগে থেকেই আছে।', true); return; }
-                const newData = {};
-                for(const key in data) {
-                    if (key === oldName) { newData[newName] = data[oldName]; } 
-                    else { newData[key] = data[key]; }
-                }
-                savePasswords(newData);
-                refreshUI(); renderCategoryManagement();
-                showToast('ক্যাটাগরি সফলভাবে এডিট করা হয়েছে!');
-            } catch {}
-        }
-        async function deleteManagedCategory(catName) {
-            try {
-                await showNotification({
-                    title: 'আপনি কি নিশ্চিত?', message: `আপনি কি "${catName}" ক্যাটাগরি এবং এর ভেতরের সব পাসওয়ার্ড মুছে ফেলতে চান?`,
-                    icon: `<i class="fas fa-exclamation-triangle" style="color:var(--danger-color)"></i>`,
-                    buttons: [{ text: 'না', class: 'btn-secondary', action: 'reject' }, { text: 'হ্যাঁ, মুছুন', class: 'btn-danger', action: 'resolve' }]
-                });
-                let data = getPasswords();
-                delete data[catName];
-                savePasswords(data);
-                refreshUI(); renderCategoryManagement();
-                showToast('ক্যাটাগরি মুছে ফেলা হয়েছে!');
-            } catch {}
-        }
-        async function clearAllData() {
-             try {
-                await showNotification({
-                    title: 'আপনি কি নিশ্চিত?', message: 'আপনি কি সব ক্যাটাগরি এবং পাসওয়ার্ড স্থায়ীভাবে মুছে ফেলতে চান? এই কাজটি ফেরানো যাবে না।',
-                    icon: `<i class="fas fa-exclamation-triangle" style="color:var(--danger-color)"></i>`,
-                    buttons: [{ text: 'না, বাতিল করুন', class: 'btn-secondary', action: 'reject' }, { text: 'হ্যাঁ, সবকিছু মুছুন', class: 'btn-danger', action: 'resolve' }]
-                });
-                savePasswords({}); // Save an empty object
-                refreshUI();
-                closeModal('settingsModal');
-                showToast('সব ডেটা সফলভাবে মুছে ফেলা হয়েছে!');
-            } catch { /* User cancelled */ }
-        }
-        function showPrompt(config) {
-            return new Promise((resolve, reject) => {
-                showNotification({
-                    title: config.title, 
-                    message: `<p>${config.message}</p><div class="form-group" style="margin-top: 15px;"><input type="text" id="promptInput" value="${config.defaultValue || ''}" style="background-color: var(--background-color); border: 1px solid var(--border-color);"></div>`,
-                    icon: `<i class="fas fa-edit" style="color:var(--primary-color)"></i>`,
-                    buttons: [{ text: 'বাতিল', class: 'btn-secondary', action: 'reject' }, { text: 'সংরক্ষণ করুন', class: 'btn-primary', action: 'resolve' }]
-                }).then(() => { resolve(document.getElementById('promptInput').value); }).catch(reject);
-            });
-        }
-        window.onclick = (event) => { if (event.target.classList.contains('modal')) event.target.style.display = "none"; }
+        // The rest of the JavaScript functions are the same as the final version.
+        // migrateOldData, getPasswords, savePasswords, refreshUI, renderPasswords, etc. all go here.
+        // Make sure to include ALL JavaScript functions from the previous final code.
+        function migrateOldData(){const t=localStorage.getItem(STORAGE_KEY);if(t)return;const e=["passwords_v18","passwords_v17","passwords_v16","passwords_v15","passwords_v14","passwords_v13","passwords_v12","passwords_v11","passwords_v10","passwords_v9","passwords_v8","passwords_v2","passwords"];for(const o of e){const a=localStorage.getItem(o);if(a)return localStorage.setItem(STORAGE_KEY,a),void localStorage.removeItem(o)}}getPasswords=()=>JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}"),savePasswords=t=>localStorage.setItem(STORAGE_KEY,JSON.stringify(t));function refreshUI(){renderPasswords(),renderCategoryTabs(),applyFilters()}function renderPasswords(){const t=document.getElementById("passwordList");t.innerHTML="";const e=getPasswords();if(0===Object.keys(e).length)return t.innerHTML='<div class="empty-state" id="initialEmptyState"><i class="fas fa-key"></i><p>এখনো কোনো পাসওয়ার্ড সেভ করা হয়নি।</p></div>',void(document.getElementById("noResultsState").style.display="none");Object.keys(e).forEach(o=>{e[o].forEach((a,s)=>{const n=document.createElement("div");n.className="password-item",n.dataset.category=o,n.innerHTML=`<div class="icon"><i class="fas fa-shield-alt"></i></div><div class="details"><strong>${a.website}</strong><br><span>${a.username}</span></div><div class="actions"><button onclick="viewPassword('${o}', ${s})"><i class="fas fa-eye"></i></button><button onclick="openEditModal('${o}', ${s})"><i class="fas fa-pen"></i></button><button onclick="deletePassword('${o}', ${s})"><i class="fas fa-trash"></i></button></div>`,t.appendChild(n)})})}function renderCategoryTabs(){const t=document.getElementById("categoryTabs"),e=document.querySelector(".tab-item.active")?.dataset.category||"All";t.innerHTML="";const o=Object.keys(getPasswords());["All",...o].forEach(o=>{const a=document.createElement("div");a.className="tab-item",o===e&&a.classList.add("active"),a.innerText=o,a.dataset.category=o,a.onclick=()=>filterByCategory(o),t.appendChild(a)})}function filterByCategory(t){document.querySelectorAll(".tab-item").forEach(t=>t.classList.remove("active")),document.querySelector(`.tab-item[data-category="${t}"]`).classList.add("active"),applyFilters()}function applyFilters(){const t=document.getElementById("noResultsState");t.style.display="none";const e=document.getElementById("initialEmptyState");e&&(e.style.display="none");const o=document.querySelector(".tab-item.active")?.dataset.category||"All",a=document.getElementById("searchInput").value.toUpperCase();let s=0;const n=document.querySelectorAll(".password-item");n.forEach(t=>{const e="All"===o||t.dataset.category===o,a=t.querySelector("strong").innerText.toUpperCase().includes(searchTerm);e&&a?(t.classList.remove("hidden"),s++):t.classList.add("hidden")}),0===s&&Object.keys(getPasswords()).length>0&&(t.style.display="block")}function closeModal(t){document.getElementById(t).style.display="none"}function openAddModal(){const t=document.getElementById("passwordModal");["editCategoryStore","editIndexStore","website","username","password"].forEach(t=>{document.getElementById(t).value=""}),document.getElementById("modalTitle").innerText="নতুন পাসওয়ার্ড যোগ করুন";const e=document.querySelector(".tab-item.active").dataset.category,o=document.getElementById("categoryInputContainer");"All"===e?o.innerHTML='<label>ক্যাটাগরি</label><div class="custom-select" onclick="openCategorySelector()"><span id="categoryDisplayText">-- ক্যাটাগরি সিলেক্ট করুন --</span></div><input type="hidden" id="categoryValue"><input type="text" id="newCategoryInput" placeholder="নতুন ক্যাটাগরির নাম দিন" style="margin-top: 10px;">`:o.innerHTML=`<label>ক্যাটাগরি</label><input type="text" id="newCategoryInput" value="${e}">`,t.style.display="block"}function openCategorySelector(){const t=document.getElementById("categoryList");t.innerHTML="";const e=Object.keys(getPasswords()),o=document.getElementById("categoryValue").value;e.forEach(e=>{const o=document.createElement("div");o.className="category-option",o.innerHTML=`<span>${e}</span><div class="radio"></div>`,o.onclick=()=>selectCategory(e),t.appendChild(o)});const a=document.createElement("div");a.className="category-option",a.innerHTML='<span>-- নতুন ক্যাটাগরি যোগ করুন --</span><div class="radio"></div>',a.onclick=()=>selectCategory("__addNew__"),t.appendChild(a),document.getElementById("categoryModal").style.display="block"}function selectCategory(t){document.getElementById("categoryValue").value=t;const e=document.getElementById("categoryDisplayText"),o=document.getElementById("newCategoryInput");"__addNew__"===t?(e.innerText="নতুন ক্যাটাগরি যোগ করা হচ্ছে...",o.style.display="block",o.focus()):(e.innerText=t,o.style.display="none"),closeModal("categoryModal")}function openEditModal(t,e){const o=document.getElementById("passwordModal"),a=getPasswords()[t][e];document.getElementById("modalTitle").innerText="পাসওয়ার্ড এডিট করুন",document.getElementById("editCategoryStore").value=t,document.getElementById("editIndexStore").value=e,document.getElementById("categoryInputContainer").innerHTML=`<label>ক্যাটাগরি</label><input type="text" id="newCategoryInput" value="${t}">`,document.getElementById("website").value=a.website,document.getElementById("username").value=a.username,document.getElementById("password").value=a.password,o.style.display="block"}function savePassword(){const t=document.getElementById("website").value.trim(),e=document.getElementById("username").value.trim(),o=document.getElementById("password").value.trim();let a="";const s=document.querySelector(".custom-select");if(s){const t=document.getElementById("categoryValue").value;a="__addNew__"===t?document.getElementById("newCategoryInput").value.trim():t}else a=document.getElementById("newCategoryInput").value.trim();if(!a||!t||!e||!o)return void showToast("অনুগ্রহ করে সব ঘর পূরণ করুন।",!0);let n=getPasswords();const l=document.getElementById("editCategoryStore").value,c=document.getElementById("editIndexStore").value;c&&(n[l].splice(c,1),0===n[l].length&&delete n[l]),n[a]||(n[a]=[]),n[a].push({website:t,username:e,password:o}),savePasswords(n),closeModal("passwordModal"),refreshUI(),showToast("সফলভাবে সংরক্ষণ করা হয়েছে!")}async function deletePassword(t,e){try{await showNotification({title:"আপনি কি নিশ্চিত?",message:`আপনি কি "${getPasswords()[t][e].website}" পাসওয়ার্ডটি মুছে ফেলতে চান?`,icon:'<i class="fas fa-trash-alt" style="color:var(--danger-color)"></i>',buttons:[{text:"না, বাতিল করুন",class:"btn-secondary",action:"reject"},{text:"হ্যাঁ, মুছুন",class:"btn-danger",action:"resolve"}]});let o=getPasswords();o[t].splice(e,1),0===o[t].length&&delete o[t],savePasswords(o),refreshUI(),showToast("সফলভাবে মুছে ফেলা হয়েছে!")}catch(t){}}function viewPassword(t,e){const o=getPasswords()[t][e];document.getElementById("viewPasswordTitle").innerText=o.website,document.getElementById("viewUsername").innerText=o.username;const a=document.getElementById("viewPasswordInput");a.value=o.password,a.type="password",document.getElementById("togglePasswordVisibility").className="fas fa-eye",document.getElementById("copyUsername").onclick=()=>copyToClipboard(o.username,"ইউজারনেম"),document.getElementById("copyPassword").onclick=()=>copyToClipboard(o.password,"পাসওয়ার্ড"),document.getElementById("viewPasswordModal").style.display="block"}function copyToClipboard(t,e){navigator.clipboard.writeText(t).then(()=>{showToast(`${e} কপি করা হয়েছে!`)}).catch(()=>{showToast("কপি করতে ব্যর্থ হয়েছে",!0)})}function showToast(t,e=!1){const o=document.getElementById("toastNotification");o.innerText=t,o.style.backgroundColor=e?"var(--danger-color)":"#333",o.classList.add("show"),setTimeout(()=>{o.classList.remove("show")},2e3)}function openSettingsModal(){document.getElementById("settingsModal").style.display="block",renderCategoryManagement()}function backupData(){const t=getPasswords();if(0===Object.keys(t).length)return void showToast("ব্যাকআপ করার মতো কোনো ডেটা নেই।",!0);const e=new Blob([JSON.stringify(t,null,2)],{type:"application/json"}),o=document.createElement("a");o.href=URL.createObjectURL(e),o.download="পাসওয়ার্ড ব্যাকআপ.json",document.body.appendChild(o),o.click(),document.body.removeChild(o),URL.revokeObjectURL(o.href),showToast("ব্যাকআপ ফাইল ডাউনলোড শুরু হয়েছে।")}async function restoreData(t){const e=t.target.files[0];if(!e)return;const o=new FileReader;o.onload=async e=>{try{const o=JSON.parse(e.target.result);if("object"!=typeof o||null===o)throw new Error("Invalid format");await showNotification({title:"রিস্টোর নিশ্চিত করুন",message:"আপনি কি এই ফাইল থেকে ডেটা রিস্টোর করতে চান?",icon:'<i class="fas fa-upload" style="color:var(--primary-color)"></i>',buttons:[{text:"না",class:"btn-secondary",action:"reject"},{text:"হ্যাঁ",class:"btn-primary",action:"resolve"}]});const a=getPasswords();let s=0;for(const t in o)for(const e of(a[t]||(a[t]=[]),o[t]))a[t].some(o=>o.website===e.website&&o.username===e.username)||(a[t].push(e),s++);savePasswords(a),refreshUI(),closeModal("settingsModal"),s>0?showToast(`${s} টি নতুন পাসওয়ার্ড যোগ করা হয়েছে!`):showToast("কোনো নতুন পাসওয়ার্ড পাওয়া যায়নি।")}catch(e){e&&showToast("ভুল ফাইল ফরম্যাট।",!0)}finally{t.target.value=""}},o.readAsText(e)}function toggleDarkMode(){document.body.classList.toggle("dark-mode"),localStorage.setItem("theme",document.body.classList.contains("dark-mode")?"dark":"light")}function showDeveloperInfo(){closeModal("settingsModal"),document.getElementById("developerModal").style.display="block"}function showNotification(t){return new Promise((e,o)=>{const a=document.getElementById("notificationModal");document.getElementById("notificationIcon").innerHTML=t.icon||"",document.getElementById("notificationTitle").innerText=t.title,document.getElementById("notificationMessage").innerHTML=t.message;const s=document.getElementById("notificationActions");s.innerHTML="",(t.buttons||[]).forEach(t=>{const n=document.createElement("button");n.innerText=t.text,n.className=t.class,n.onclick=()=>{closeModal("notificationModal"),"resolve"===t.action?e():o()},s.appendChild(n)}),a.style.display="block"})}function renderCategoryManagement(){const t=document.getElementById("categoryManagementList");t.innerHTML="";const e=Object.keys(getPasswords());if(0===e.length)return void(t.innerHTML='<p style="text-align:center; color: var(--secondary-color); padding: 10px 0;">কোনো ক্যাটাগরি নেই।</p>');e.forEach(e=>{const o=document.createElement("div");o.className="settings-item",o.innerHTML=`<span>${e}</span><div class="actions"><button onclick="editCategory('${e}')"><i class="fas fa-pen"></i></button><button onclick="deleteManagedCategory('${e}')"><i class="fas fa-trash"></i></button></div>`,t.appendChild(o)})}async function addCategory(){try{const t=await showPrompt({title:"নতুন ক্যাটাগরি",message:"নতুন ক্যাটাগরির নাম দিন:"});if(!t||""===t.trim())return;const e=getPasswords();if(e[t])return void showToast("এই ক্যাটাগরি আগে থেকেই আছে।",!0);e[t]=[],savePasswords(e),renderCategoryManagement(),renderCategoryTabs(),showToast("ক্যাটাগরি যোগ করা হয়েছে!")}catch(t){}}async function editCategory(t){try{const e=await showPrompt({title:"ক্যাটাগরি এডিট করুন",message:`"${t}" এর নতুন নাম দিন:`,defaultValue:t});if(!e||""===e.trim()||e===t)return;const o=getPasswords();if(o[e])return void showToast("এই নামের ক্যাটাগরি আগে থেকেই আছে।",!0);const a={};for(const s in o)s===t?a[e]=o[t]:a[s]=o[s];savePasswords(a),refreshUI(),renderCategoryManagement(),showToast("ক্যাটাগরি সফলভাবে এডিট করা হয়েছে!")}catch(t){}}async function deleteManagedCategory(t){try{await showNotification({title:"আপনি কি নিশ্চিত?",message:`আপনি কি "${t}" ক্যাটাগরি এবং এর ভেতরের সব পাসওয়ার্ড মুছে ফেলতে চান?`,icon:'<i class="fas fa-exclamation-triangle" style="color:var(--danger-color)"></i>',buttons:[{text:"না",class:"btn-secondary",action:"reject"},{text:"হ্যাঁ, মুছুন",class:"btn-danger",action:"resolve"}]});let e=getPasswords();delete e[t],savePasswords(e),refreshUI(),renderCategoryManagement(),showToast("ক্যাটাগরি মুছে ফেলা হয়েছে!")}catch(t){}}async function clearAllData(){try{await showNotification({title:"আপনি কি নিশ্চিত?",message:"আপনি কি সব ক্যাটাগরি এবং পাসওয়ার্ড স্থায়ীভাবে মুছে ফেলতে চান? এই কাজটি ফেরানো যাবে না।",icon:'<i class="fas fa-exclamation-triangle" style="color:var(--danger-color)"></i>',buttons:[{text:"না, বাতিল করুন",class:"btn-secondary",action:"reject"},{text:"হ্যাঁ, সবকিছু মুছুন",class:"btn-danger",action:"resolve"}]}),savePasswords({}),refreshUI(),closeModal("settingsModal"),showToast("সব ডেটা সফলভাবে মুছে ফেলা হয়েছে!")}catch(t){}}function showPrompt(t){return new Promise((e,o)=>{showNotification({title:t.title,message:`<p>${t.message}</p><div class="form-group" style="margin-top: 15px;"><input type="text" id="promptInput" value="${t.defaultValue||""}" style="background-color: var(--background-color); border: 1px solid var(--border-color);"></div>`,icon:'<i class="fas fa-edit" style="color:var(--primary-color)"></i>',buttons:[{text:"বাতিল",class:"btn-secondary",action:"reject"},{text:"সংরক্ষণ করুন",class:"btn-primary",action:"resolve"}]}).then(()=>{e(document.getElementById("promptInput").value)}).catch(o)})}window.onclick=t=>{t.target.classList.contains("modal")&&(t.target.style.display="none")};
     </script>
 </body>
 </html>
