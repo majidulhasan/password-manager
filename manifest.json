@@ -1,0 +1,16 @@
+{
+  "name": "পাসওয়ার্ড ম্যানেজার",
+  "short_name": "পাসওয়ার্ড",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#007BFF",
+  "description": "আপনার পাসওয়ার্ড সুরক্ষিত রাখার সহজ সমাধান।",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
