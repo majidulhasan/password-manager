@@ -1,7 +1,7 @@
 {
   "name": "পাসওয়ার্ড ম্যানেজার",
   "short_name": "পাসওয়ার্ড",
-  "start_url": ".",
+  "start_url": "https://majidulhasan.github.io/password-manager/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#007BFF",
