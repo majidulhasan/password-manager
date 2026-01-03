@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>পাসওয়ার্ড ম্যানেজার</title>
+    <title>PassNest 𝐁𝐲 ➤ 𝗠 𝗛 {𝗦𝗵𝗮𝗵𝗶𝗻}</title>
     
     <!-- PWA Manifest and Theme -->
     <link rel="manifest" href="manifest.json">
@@ -104,7 +104,7 @@
     </style>
 </head>
 <body>
-    <div class="header">পাসওয়ার্ড ম্যানেজার</div>
+    <div class="header">PassNest 𝐁𝐲 ➤ 𝗠 𝗛 {𝗦𝗵𝗮𝗵𝗶𝗻}</div>
     <div class="top-section">
         <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="অ্যাপ বা ওয়েবসাইট খুঁজুন..."></div>
         <div class="category-tabs" id="categoryTabs"></div>
@@ -181,9 +181,10 @@
     <div id="developerModal" class="modal">
         <div class="modal-content">
             <div class="modal-header"><h2 class="modal-title">ডেভেলপার পরিচিতি</h2><span class="close" onclick="closeModal('developerModal')">&times;</span></div>
-            <img id="developer-pic" src="https://i.ibb.co/C0TPc5j/Pics-Art-08-23-09-24-33.png" alt="Developer Pic">
+            <img id="developer-pic" src="https://i.postimg.cc/W13RYW8V/20251108-090556.jpg" alt="Developer Pic">
             <h3 id="developer-name">মোঃ মাজিদুল হাসান {শাহীন}</h3>
-            <p id="developer-bio">একজন ওয়েব ও অ্যাপ ডেভেলপার হিসেবে আমি সবসময় চেষ্টা করি প্রযুক্তিকে মানুষের জন্য আরও সহজ, কার্যকর এবং উপভোগ্য করে তুলতে।</p>
+            <p id="developer-bio">একজন ওয়েব ও অ্যাপ ডেভেলপার হিসেবে আমি সবসময় চেষ্টা করি প্রযুক্তিকে মানুষের জন্য আরও সহজ, কার্যকর এবং উপভোগ্য করে তুলতে। আমার প্রতিটি প্রজেক্টে ব্যবহারকারীর প্রয়োজন, আকর্ষণীয় ডিজাইন ও সর্বোচ্চ পারফরম্যান্সকে সর্বাধিক গুরুত্ব দিই।
+নতুন কিছু শেখা, তৈরি করা এবং সেটিকে মানুষের উপকারে কাজে লাগানোই আমার কাজের সবচেয়ে বড় অনুপ্রেরণা।</p>
             <div id="developer-socials">
                 <a href="mailto:your.email@example.com" target="_blank"><i class="fas fa-envelope"></i></a>
                 <a href="https://facebook.com/yourprofile" target="_blank"><i class="fab fa-facebook"></i></a>
@@ -375,7 +376,7 @@
             if (Object.keys(data).length === 0) { showToast("ব্যাকআপ করার মতো কোনো ডেটা নেই।", true); return; }
             const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob); a.download = 'পাসওয়ার্ড ব্যাকআপ.json';
+            a.href = URL.createObjectURL(blob); a.download = 'Password backup 𝐁𝐲 ➤ 𝗠 𝗛 {𝗦𝗵𝗮𝗵𝗶𝗻}.json';
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(a.href);
             showToast("ব্যাকআপ ফাইল ডাউনলোড শুরু হয়েছে।");
