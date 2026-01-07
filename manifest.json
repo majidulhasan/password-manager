@@ -1,7 +1,7 @@
 {
   "name": "PassNest 𝐁𝐲 ➤ 𝗠 𝗛 {𝗦𝗵𝗮𝗵𝗶𝗻}",
   "short_name": "PassNest",
-  "start_url": "https://majidulhasan.github.io/password-manager/",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#007BFF",
@@ -10,7 +10,8 @@
     {
       "src": "icon.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }
