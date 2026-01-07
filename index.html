@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <style>
+        /* All CSS code remains unchanged */
         :root {
             --primary-color: #007BFF; --secondary-color: #6c757d; --background-color: #f4f7f6;
             --card-bg-color: #ffffff; --text-color: #333; --shadow: 0 4px 8px rgba(0,0,0,0.1);
@@ -103,7 +104,7 @@
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
 </head>
-<body>
+<body oncontextmenu="return false;" onselectstart="return false;" onkeydown="if(event.keyCode==123){return false;}">
     <div class="header">PassNest 𝐁𝐲 ➤ 𝗠 𝗛 {𝗦𝗵𝗮𝗵𝗶𝗻}</div>
     <div class="top-section">
         <div class="search-box"><i class="fas fa-search"></i><input type="text" id="searchInput" onkeyup="applyFilters()" placeholder="অ্যাপ বা ওয়েবসাইট খুঁজুন..."></div>
@@ -204,6 +205,13 @@
         const STORAGE_KEY = 'passwords_final';
 
         document.addEventListener('DOMContentLoaded', () => {
+            // Register Service Worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js')
+                    .then(registration => console.log('ServiceWorker registration successful.'))
+                    .catch(err => console.log('ServiceWorker registration failed: ', err));
+            }
+
             migrateOldData();
             const savedTheme = localStorage.getItem('theme') || 'light';
             if (savedTheme === 'dark') {
@@ -519,4 +527,4 @@
         window.onclick = (event) => { if (event.target.classList.contains('modal')) event.target.style.display = "none"; }
     </script>
 </body>
-</html>
+    </html>
